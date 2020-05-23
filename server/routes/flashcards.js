@@ -4,6 +4,6 @@ const flashcardsController = require('../controllers/flashcards');
 
 const router = express.Router();
 
-router.post('/translation', flashcardsController.postTranslation);
+router.get('/dictionaries', flashcardsController.getDictionaries);
 
 module.exports = router;

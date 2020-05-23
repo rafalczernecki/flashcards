@@ -18,15 +18,16 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('', flashcardsRoutes);
+app.use('/flashcards', flashcardsRoutes);
 
 mongoose
   .connect(
     'mongodb+srv://user:user@cluster0-5maxx.mongodb.net/flashcards?retryWrites=true&w=majority'
   )
   .then(result => {
-      app.listen(8080);
+
+      app.listen(3000);
   })
   .catch((err) => {
-      console.log('err');
+      console.log(err);
   });
