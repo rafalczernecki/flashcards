@@ -1,10 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const flashcardsRoutes = require('./routes/flashcards');
-
 const app = express();
 const mongoose = require('mongoose');
+
+const flashcardsRoutes = require('./routes/flashcards');
 
 app.use(bodyParser.json());
 
