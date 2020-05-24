@@ -56,6 +56,11 @@ exports.postTranslation = (req, res, next) => {
       });
 
       apiRes.on('end', () => {
+        
+        if(!data.length) {
+          res.status(404).json({message: "No translations found"});
+        }
+        
         let translations = JSON.parse(data);
         translations = translationsUtils.parseTranslations(translations);
 
