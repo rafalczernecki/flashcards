@@ -1,0 +1,7 @@
+<div class="max-width translation" *ngFor="let translation of translations">
+    <app-translation class="max-width" [value]="translation" (valueChanged)="onChildValueChange($event)"></app-translation>
+</div>
+<div class="butons-placeholder">
+    <button class="btn btn-primary" (click)="onFlashcardSaved()">Save</button>
+    <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
+</div>

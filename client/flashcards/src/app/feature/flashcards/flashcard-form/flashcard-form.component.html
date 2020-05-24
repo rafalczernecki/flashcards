@@ -1,0 +1,51 @@
+<div class="container">
+  <h1>Add flashcard</h1>
+  <form [formGroup]="form" (ngSubmit)="translationFormSubmit()"
+    *ngIf="availableTranslationLanguages && !translationRequestSent">
+    <div class="form-group col-md-6">
+      <label for="originalLang">Original language</label>
+      <select id="originalLang" class="form-control" formControlName="originalLang"
+        (change)="originalLangSelected($event.target.value)">
+        <option *ngFor="let lang of availableTranslationLanguages" [value]="lang.originalLang">
+          {{ lang.originalLang.toUpperCase() }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="translationLang">Translation language</label>
+      <select id="translationLang" class="form-control" formControlName="translationLang"
+        (change)="translationLangSelected($event.target.value)">
+        <option *ngFor="let lang of availableTranslationLanguagesForGivenOrigin" [value]="lang">
+          {{ lang.toUpperCase() }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="word">Word</label>
+      <input type="text" class="form-control" id="word" formControlName="word">
+      <div class="alert alert-danger"
+        *ngIf="(form.get('word').invalid ) && (form.get('word').touched || form.get('word').dirty)">
+        Word must be of length 1 - 30</div>
+    </div>
+    <div class="form-group col-md-6">
+      <button type="submit" class="btn btn-primary" id="submit"
+        [disabled]="form.invalid || !originalLang || !translationLang">Find translations</button>
+    </div>
+  </form>
+
+  <div class="info" *ngIf="translationRequestSent">
+    <label>original language: <strong>{{ originalLang.toUpperCase() }}</strong></label><br>
+    <label>translation language: <strong>{{ translationLang.toUpperCase() }}</strong></label><br>
+    <label>word: <strong>{{ form.controls.word.value }}</strong></label><br>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="errorMessage">
+    {{ errorMessage }}</div>
+
+  <button class="btn btn-primary" *ngIf="errorMessage" (click)="onFlashcardCanceled()">Back</button>
+
+  <h2 *ngIf="flashcard && translations">Choose translations</h2>
+  <app-translations-container *ngIf="flashcard && translations" [translations]="translations"
+    (flashcardSaved)="onFlashcardSaved($event)" (flashcardCanceled)="onFlashcardCanceled()">
+  </app-translations-container>
+</div>

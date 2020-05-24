@@ -1,0 +1,7 @@
+<div class="container">
+    <input type="checkbox" [checked]="value.checked" (change)="changeValue($event.target.checked)">
+    <span class="translations-placehoder">
+        <div class="translation">{{value.originalWord}}</div>
+        <div class="translation">{{value.translatedWord}}</div>
+    </span>
+</div>
