@@ -21,6 +21,10 @@ export class FlashcardService {
     return this.http.get<string[]>(this.url + '/dictionaries');
   }
 
+  saveFlashcard(flashcard): Observable<Flashcard> {
+    return this.http.post<Flashcard>(this.url + '/save', {...flashcard});
+  }
+
   getTranslationLanguagesPairs(dictionaries): TranslationLanguagesPair[] {
     const pairs = [];
 
