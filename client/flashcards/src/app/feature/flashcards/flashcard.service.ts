@@ -2,21 +2,77 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Flashcard } from 'src/app/shared/model/flashcard.model';
+import { TranslationLanguagesPair } from 'src/app/shared/model/translation-languages-pair.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class FlashcardService {
-  private url = 'http://localhost:8096/translation';
+  private url = 'http://localhost:3000/flashcards';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getMessage(): Observable<Message> {
-    return this.http.post<Message>(this.url, null);
+  getTranslation(dictionary, originalLang, word): Observable<Flashcard> {
+    return this.http.post<Flashcard>(this.url + '/translation', {dictionary, originalLang, word});
   }
-}
 
-export interface Message {
-  message: string;
+  getDictionaries(): Observable<string[]> {
+    return this.http.get<string[]>(this.url + '/dictionaries');
+  }
+
+  getTranslationLanguagesPairs(dictionaries): TranslationLanguagesPair[] {
+    const pairs = [];
+
+    dictionaries.forEach((l) => {
+      let firstLangAlreadyInArr = false;
+      let secondLangAlreadyInArr = false;
+      const firstLang = l.substring(0, 2);
+      const secondLang = l.substring(2, 4);
+
+      pairs.forEach((p) => {
+        if (p.originalLang === firstLang) {
+          p.availableTranslationLanguages.push(secondLang);
+          firstLangAlreadyInArr = true;
+        }
+        if (p.originalLang === secondLang) {
+          p.availableTranslationLanguages.push(firstLang);
+          secondLangAlreadyInArr = true;
+        }
+      });
+
+      if (!firstLangAlreadyInArr) {
+        pairs.push({
+          originalLang: firstLang,
+          availableTranslationLanguages: [secondLang],
+        });
+      }
+      if (!secondLangAlreadyInArr) {
+        pairs.push({
+          originalLang: secondLang,
+          availableTranslationLanguages: [firstLang],
+        });
+      }
+    });
+
+    return pairs;
+  }
+
+  getDictionaryName(
+    availableDictionaries,
+    originalLang,
+    translationLang
+  ): string {
+    let languagesCombination = (originalLang + translationLang).toLowerCase();
+
+
+    let dictionary = availableDictionaries.find(d => d === languagesCombination);
+
+    if (!dictionary) {
+      languagesCombination = (translationLang + originalLang).toLowerCase();
+      dictionary = availableDictionaries.find(d => d === languagesCombination);
+    }
+
+    return dictionary;
+  }
 }

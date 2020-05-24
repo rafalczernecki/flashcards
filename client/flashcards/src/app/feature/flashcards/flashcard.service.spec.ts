@@ -28,10 +28,4 @@ describe('FlashcardService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should conntect with server and recive response', () => {
-    service.getMessage().subscribe((data) => {
-      console.log(data.message);
-      expect(data.message).toEqual('Hello');
-    });
-  });
 });

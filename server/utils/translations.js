@@ -19,11 +19,7 @@ exports.parseTranslations = (apiResponse) => {
             originalWord = originalWord.trim();
             htmlParser.parse(translation.target, {
               text: function (value) {
-                if (value.length == 1) {
-                  translatedWord += '(' + value.trim() + ')';
-                } else {
                   translatedWord += value.trim() + ' ';
-                }
               },
             });
             translatedWord = translatedWord.trim();
