@@ -1,4 +1,4 @@
 export interface TranslationLanguagesPair {
-    originalLang: string;
-    availableTranslationLanguages: string [];
-  }
+  originalLang: string;
+  availableTranslationLanguages: string[];
+}
