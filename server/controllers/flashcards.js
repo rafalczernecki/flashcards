@@ -4,9 +4,13 @@ const { validationResult } = require('express-validator');
 const translationsUtils = require('../utils/translations');
 const Flashcard = require('../model/flashcard');
 
+const APIKey =
+    '11d75337f5d1fd7aa58e4145a283e9e1b30c96bffc4a385ec15b90a170ae7792';
+
 exports.getDictionaries = (req, res, next) => {
   const lang = 'en';
   const apiURL = `http://api.pons.com/v1/dictionaries?language=${lang}`;
+
   http
     .get(apiURL, (apiRes) => {
       let data = '';
@@ -36,16 +40,6 @@ exports.postTranslation = (req, res, next) => {
   const word = req.body.word;
 
   const apiURL = `http://api.pons.com/v1/dictionary?q=${word}&l=${dictionary}&in=${originalLang}`;
-  const APIKey =
-    '11d75337f5d1fd7aa58e4145a283e9e1b30c96bffc4a385ec15b90a170ae7792';
-
-  const options = {
-    hostname: 'httpbin.org',
-    path: '/get',
-    headers: {
-      Authorization: 'authKey',
-    },
-  };
 
   http
     .get(apiURL, { headers: { 'X-Secret': APIKey } }, (apiRes) => {
@@ -56,11 +50,10 @@ exports.postTranslation = (req, res, next) => {
       });
 
       apiRes.on('end', () => {
-        
-        if(!data.length) {
-          res.status(404).json({message: "No translations found"});
+        if (!data.length) {
+          res.status(404).json({ message: 'No translations found' });
         }
-        
+
         let translations = JSON.parse(data);
         translations = translationsUtils.parseTranslations(translations);
 
@@ -94,7 +87,7 @@ exports.postSave = (req, res, next) => {
   const word = req.body.word;
   const translations = req.body.translations;
 
-  const flashCardSchema = new Flashcard ({
+  const flashCardSchema = new Flashcard({
     id: id,
     dictionary: dictionary,
     originalLang: originalLang,
@@ -106,7 +99,7 @@ exports.postSave = (req, res, next) => {
     .save()
     .then((result) => {
       res.status(201).json({
-        result
+        result,
       });
     })
     .catch((err) => console.log(err));
