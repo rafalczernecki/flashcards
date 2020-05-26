@@ -59,6 +59,8 @@ export class FlashcardService {
       }
     });
 
+    pairs.sort((p1, p2) => p1.originalLang.localeCompare(p2.originalLang));
+    pairs.forEach(p => p.availableTranslationLanguages.sort());
     return pairs;
   }
 
