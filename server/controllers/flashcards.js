@@ -5,7 +5,7 @@ const translationsUtils = require('../utils/translations');
 const Flashcard = require('../model/flashcard');
 
 const APIKey =
-    '11d75337f5d1fd7aa58e4145a283e9e1b30c96bffc4a385ec15b90a170ae7792';
+  '11d75337f5d1fd7aa58e4145a283e9e1b30c96bffc4a385ec15b90a170ae7792';
 
 exports.getDictionaries = (req, res, next) => {
   const lang = 'en';
@@ -103,4 +103,17 @@ exports.postSave = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
+};
+
+exports.postFlashcards = (req, res, next) => {
+  const dictionary = req.body.dictionary;
+  const originalLang = req.body.originalLang;
+
+  Flashcard.find({dictionary: dictionary, originalLang: originalLang})
+    .then(flashcards => {
+      res.status(200).json(flashcards);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

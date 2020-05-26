@@ -16,4 +16,6 @@ router.post('/save', [
     body('translations').isLength({min: 1, max: 50})
 ], flashcardsController.postSave);
 
+router.post('', flashcardsController.postFlashcards);
+
 module.exports = router;
