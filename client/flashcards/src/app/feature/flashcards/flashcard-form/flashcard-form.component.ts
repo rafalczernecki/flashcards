@@ -5,6 +5,7 @@ import { FlashcardService } from '../flashcard.service';
 import { TranslationLanguagesPair } from 'src/app/shared/model/translation-languages-pair.model';
 import { TranslationPairElement } from 'src/app/shared/model/translation-pair-element.model';
 import { TranslationPair } from 'src/app/shared/model/translation-pair.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-flashcard-form',
@@ -28,7 +29,15 @@ export class FlashcardFormComponent implements OnInit {
   translations: TranslationPairElement[];
   errorMessage: string;
 
-  constructor(private flashcardService: FlashcardService) {}
+  constructor(
+    private flashcardService: FlashcardService,
+    private router: Router
+  ) {
+    if (this.router.getCurrentNavigation().extras.state) {
+      this.originalLang = this.router.getCurrentNavigation().extras.state.originalLang;
+      this.translationLang = this.router.getCurrentNavigation().extras.state.translationLang;
+    }
+  }
 
   ngOnInit(): void {
     this.flashcardService.getDictionaries().subscribe(
@@ -37,6 +46,10 @@ export class FlashcardFormComponent implements OnInit {
         this.availableTranslationLanguages = this.flashcardService.getTranslationLanguagesPairs(
           data
         );
+        if (this.originalLang && this.translationLang) {
+          this.setAvailableTranslationLanguages(this.originalLang);
+          this.form.setValue({originalLang: this.originalLang, translationLang: this.translationLang, word: ''});
+        }
       },
       (error) => {
         console.log(error);
@@ -46,12 +59,13 @@ export class FlashcardFormComponent implements OnInit {
 
   originalLangSelected(value): void {
     this.originalLang = value;
-    if (value === this.translationLang) {
-      this.translationLang = null;
-    }
 
+    this.setAvailableTranslationLanguages(value);
+  }
+
+  setAvailableTranslationLanguages(originalLang) {
     const translationLangs = this.availableTranslationLanguages.find(
-      (t) => t.originalLang === value
+      (t) => t.originalLang === originalLang
     );
 
     if (translationLangs) {
@@ -79,22 +93,32 @@ export class FlashcardFormComponent implements OnInit {
         this.originalLang,
         this.form.controls.word.value
       )
-      .subscribe(data => {
-        this.flashcard = data;
-        this.translations = [];
-        data.translations.forEach((t) => {
-          this.translations.push({ ...t, checked: false });
-        });
-      },
-      error => {
-        this.errorMessage = error.error.message;
-      });
+      .subscribe(
+        (data) => {
+          this.flashcard = data;
+          this.translations = [];
+          data.translations.forEach((t) => {
+            this.translations.push({ ...t, checked: false });
+          });
+        },
+        (error) => {
+          this.errorMessage = error.error.message;
+        }
+      );
   }
 
   onFlashcardSaved(event) {
     this.flashcard.translations = event;
     this.flashcardService.saveFlashcard(this.flashcard).subscribe((data) => {
-      //TODO: redirect to main page
+      this.router.navigate([`/flashcards`], {
+        state: {
+          originalLang: this.flashcard.originalLang,
+          translationLang: this.flashcard.dictionary.replace(
+            this.flashcard.originalLang,
+            ''
+          ),
+        },
+      });
     });
   }
 
@@ -103,5 +127,18 @@ export class FlashcardFormComponent implements OnInit {
     this.flashcard = undefined;
     this.translations = undefined;
     this.errorMessage = undefined;
+  }
+
+  navigateToFlashcards() {
+    let state;
+    if (this.originalLang && this.translationLang) {
+      state = {
+        originalLang: this.originalLang,
+        translationLang: this.translationLang,
+      };
+    }
+    this.router.navigate([`/flashcards`], {
+      state,
+    });
   }
 }
