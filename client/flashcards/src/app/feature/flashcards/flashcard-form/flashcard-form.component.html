@@ -1,3 +1,8 @@
+<div class="flashcard-navbar">
+  <div class="align-left">
+      <button class="btn btn-outline-primary" (click)="navigateToFlashcards()">Flashcards</button>
+  </div>
+</div>
 <div class="container">
   <h1>Add flashcard</h1>
   <form [formGroup]="form" (ngSubmit)="translationFormSubmit()"
@@ -28,7 +33,7 @@
         Word must be of length 1 - 30</div>
     </div>
     <div class="form-group col-md-6">
-      <button type="submit" class="btn btn-primary" id="submit"
+      <button type="submit" class="btn btn-outline-primary" id="submit"
         [disabled]="form.invalid || !originalLang || !translationLang">Find translations</button>
     </div>
   </form>
@@ -42,7 +47,7 @@
   <div class="alert alert-danger" *ngIf="errorMessage">
     {{ errorMessage }}</div>
 
-  <button class="btn btn-primary" *ngIf="errorMessage" (click)="onFlashcardCanceled()">Back</button>
+  <button class="btn btn-outline-primary" *ngIf="errorMessage" (click)="onFlashcardCanceled()">Back</button>
 
   <h2 *ngIf="flashcard && translations">Choose translations</h2>
   <app-translations-container *ngIf="flashcard && translations" [translations]="translations"
