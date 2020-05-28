@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
+  { path: '', redirectTo: '/flashcards', pathMatch: 'full' },
   {
     path: 'flashcards',
     loadChildren: () => import('./feature/feature-routing.module').then(m => m.FeatureRoutingModule)

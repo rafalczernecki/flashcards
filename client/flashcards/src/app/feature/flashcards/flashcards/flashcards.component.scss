@@ -1,0 +1,36 @@
+.flashcard-navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.no-wrap-row {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.btn, select, .label {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.label {
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    color: #007bff;
+    border-color: #007bff;
+    border: 1px solid;
+}
+
+.btn-outline-primary {
+    color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    color: white;
+}

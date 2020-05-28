@@ -25,6 +25,10 @@ export class FlashcardService {
     return this.http.post<Flashcard>(this.url + '/save', {...flashcard});
   }
 
+  getAllFlashcards(dictionary, originalLang) {
+    return this.http.post<Flashcard[]>(this.url, {dictionary, originalLang});
+  }
+
   getTranslationLanguagesPairs(dictionaries): TranslationLanguagesPair[] {
     const pairs = [];
 

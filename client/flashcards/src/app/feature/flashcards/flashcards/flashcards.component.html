@@ -1,1 +1,30 @@
-<p>flashcards works!</p>
+<div class="flashcard-navbar">
+    <div class="align-left">
+        <button class="btn btn-outline-primary" (click)="navigateToFlashcardForm()">Add Flashcard</button>
+        <input class="btn btn-outline-warning" type="button" value="Edit mode">
+
+    </div>
+
+    <div class="align-right no-wrap-row">
+        <div class="label">Languages:</div>
+        <form class="no-wrap-row" [formGroup]="form" >
+            <select id="originalLang" class="form-control" (change)="originalLangSelected($event.target.value)"
+                formControlName="originalLang">
+                <option disabled selected value> - </option>
+                <option *ngFor="let lang of availableTranslationLanguages" [value]="lang.originalLang">
+                    {{ lang.originalLang.toUpperCase() }}
+                </option>
+            </select>
+
+            <select id="translationLang" class="form-control" (change)="translationLangSelected($event.target.value)"
+                formControlName="translationLang">
+                <option disabled selected value> - </option>
+                <option *ngFor="let lang of availableTranslationLanguagesForGivenOrigin" [value]="lang">
+                    {{ lang.toUpperCase() }}
+                </option>
+            </select>
+        </form>
+    </div>
+
+</div>
+<app-flashcard-container [flashcards]="flashcards"></app-flashcard-container>
