@@ -1,7 +1,7 @@
 import { TranslationPair } from './translation-pair.model';
 
 export interface Flashcard {
-  id: string;
+  _id: string;
   dictionary: string;
   originalLang: string;
   word: string;

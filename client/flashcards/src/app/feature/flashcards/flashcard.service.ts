@@ -29,6 +29,10 @@ export class FlashcardService {
     return this.http.post<Flashcard[]>(this.url, {dictionary, originalLang});
   }
 
+  deleteFlashcard(flashcardId) {
+    return this.http.post<Flashcard>(this.url + '/delete', {flashcardId});
+  }
+
   getTranslationLanguagesPairs(dictionaries): TranslationLanguagesPair[] {
     const pairs = [];
 
