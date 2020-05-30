@@ -115,13 +115,13 @@ exports.postSave = (req, res, next) => {
     });
 
     flashcardSchema
-    .save()
-    .then((result) => {
-      res.status(201).json({
-        result,
-      });
-    })
-    .catch((err) => console.log(err));
+      .save()
+      .then((result) => {
+        res.status(201).json({
+          result,
+        });
+      })
+      .catch((err) => console.log(err));
   }
 };
 
@@ -132,6 +132,24 @@ exports.postFlashcards = (req, res, next) => {
   Flashcard.find({ dictionary: dictionary, originalLang: originalLang })
     .then((flashcards) => {
       res.status(200).json(flashcards);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.deleteFlashcard = (req, res, next) => {
+  const flashcardId = req.body.flashcardId;
+  Flashcard.findById(flashcardId)
+      .then((flashcard) => {
+        let i = 1;
+      }).catch(err => {
+        let i = 1;
+      })
+
+  Flashcard.findByIdAndRemove(flashcardId)
+    .then((result) => {
+      res.status(200).json(result);
     })
     .catch((err) => {
       console.log(err);

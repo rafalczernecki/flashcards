@@ -16,6 +16,8 @@ router.post('/save', [
     body('translations').isLength({min: 1, max: 50}).withMessage('At least one translation must be matched')
 ], flashcardsController.postSave);
 
+router.post('/delete', flashcardsController.deleteFlashcard);
+
 router.post('', flashcardsController.postFlashcards);
 
 module.exports = router;
