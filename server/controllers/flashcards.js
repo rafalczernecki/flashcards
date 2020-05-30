@@ -81,21 +81,40 @@ exports.postSave = (req, res, next) => {
       .json({ message: 'Validation failed', errors: errors.array() });
   }
 
-  const id = req.body.id;
+  const id = req.body._id;
   const dictionary = req.body.dictionary;
   const originalLang = req.body.originalLang;
   const word = req.body.word;
   const translations = req.body.translations;
 
-  const flashCardSchema = new Flashcard({
-    id: id,
-    dictionary: dictionary,
-    originalLang: originalLang,
-    word: word,
-    translations: translations,
-  });
+  if (id) {
+    Flashcard.findById(id)
+      .then((flashcard) => {
+        flashcard.translations = translations;
+        flashcard
+          .save()
+          .then((result) => {
+            res.status(201).json({
+              result,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    const flashcardSchema = new Flashcard({
+      id: id,
+      dictionary: dictionary,
+      originalLang: originalLang,
+      word: word,
+      translations: translations,
+    });
 
-  flashCardSchema
+    flashcardSchema
     .save()
     .then((result) => {
       res.status(201).json({
@@ -103,14 +122,15 @@ exports.postSave = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
+  }
 };
 
 exports.postFlashcards = (req, res, next) => {
   const dictionary = req.body.dictionary;
   const originalLang = req.body.originalLang;
 
-  Flashcard.find({dictionary: dictionary, originalLang: originalLang})
-    .then(flashcards => {
+  Flashcard.find({ dictionary: dictionary, originalLang: originalLang })
+    .then((flashcards) => {
       res.status(200).json(flashcards);
     })
     .catch((err) => {
