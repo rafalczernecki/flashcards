@@ -2,12 +2,11 @@
     <div class="align-left">
         <button class="btn btn-outline-primary" (click)="navigateToFlashcardForm()">Add Flashcard</button>
         <input class="btn btn-outline-warning" type="button" value="Edit mode" (click)="switchEditMode($event)">
-
     </div>
 
     <div class="align-right no-wrap-row">
         <div class="label">Languages:</div>
-        <form class="no-wrap-row" [formGroup]="form" >
+        <form class="no-wrap-row" [formGroup]="form">
             <select id="originalLang" class="form-control" (change)="originalLangSelected($event.target.value)"
                 formControlName="originalLang">
                 <option disabled selected value> - </option>
@@ -27,4 +26,4 @@
     </div>
 
 </div>
-<app-flashcard-container [flashcards]="flashcards" [editMode]="editMode"></app-flashcard-container>
+<app-flashcard-container [flashcards]="flashcards" [editMode]="editMode" (flashcardDeleted)="onDeleteFlashcard($event)"></app-flashcard-container>

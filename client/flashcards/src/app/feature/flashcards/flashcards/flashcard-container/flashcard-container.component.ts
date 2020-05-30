@@ -10,10 +10,14 @@ export class FlashcardContainerComponent implements OnInit {
 
   @Input() flashcards: Flashcard[];
   @Input() editMode: boolean;
+  @Output() flashcardDeleted: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  onDeleteFlashcard(event) {
+    this.flashcardDeleted.emit(event);
+  }
 }

@@ -1,3 +1,4 @@
 <div class="flashcard-container">
-    <app-flashcard *ngFor="let flashcard of flashcards" [flashcard]="flashcard" [editMode]="editMode"></app-flashcard>
+    <app-flashcard *ngFor="let flashcard of flashcards" [flashcard]="flashcard" [editMode]="editMode"
+        (flashcardDeleted)="onDeleteFlashcard($event)"></app-flashcard>
 </div>

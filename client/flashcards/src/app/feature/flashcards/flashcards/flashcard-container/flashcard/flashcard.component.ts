@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
 })
 export class FlashcardComponent implements OnInit {
   @Input() flashcard: Flashcard;
-
   @Input() editMode: boolean;
+  @Output() flashcardDeleted: EventEmitter<any> = new EventEmitter();
 
   constructor(private router: Router) {}
 
@@ -40,5 +40,9 @@ export class FlashcardComponent implements OnInit {
     this.router.navigate([`/flashcards/form`], {
       state,
     });
+  }
+
+  onDeleteFlashcard() {
+    this.flashcardDeleted.emit(this.flashcard._id);
   }
 }

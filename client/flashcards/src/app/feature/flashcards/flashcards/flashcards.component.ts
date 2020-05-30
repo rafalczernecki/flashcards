@@ -118,4 +118,15 @@ export class FlashcardsComponent implements OnInit {
       state,
     });
   }
+
+  onDeleteFlashcard(event) {
+    this.flashcardService.deleteFlashcard(event).subscribe(
+      (data) => {
+        this.flashcards = this.flashcards.filter((f) => f._id !== data._id);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
 }
