@@ -22,7 +22,7 @@ app.use('/flashcards', flashcardsRoutes);
 
 mongoose
   .connect(
-    'mongodb+srv://user:user@cluster0-5maxx.mongodb.net/flashcards?retryWrites=true&w=majority'
+    'mongodb+srv://user:FxqM6KLyIGqVTmaw@cluster0-5maxx.mongodb.net/flashcards?retryWrites=true&w=majority'
   )
   .then(result => {
 
