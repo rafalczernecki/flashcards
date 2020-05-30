@@ -1,7 +1,7 @@
 <div class="flashcard-navbar">
     <div class="align-left">
         <button class="btn btn-outline-primary" (click)="navigateToFlashcardForm()">Add Flashcard</button>
-        <input class="btn btn-outline-warning" type="button" value="Edit mode">
+        <input class="btn btn-outline-warning" type="button" value="Edit mode" (click)="switchEditMode($event)">
 
     </div>
 
@@ -27,4 +27,4 @@
     </div>
 
 </div>
-<app-flashcard-container [flashcards]="flashcards"></app-flashcard-container>
+<app-flashcard-container [flashcards]="flashcards" [editMode]="editMode"></app-flashcard-container>

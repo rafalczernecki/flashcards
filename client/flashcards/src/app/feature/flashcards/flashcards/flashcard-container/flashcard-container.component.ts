@@ -9,6 +9,7 @@ import { Flashcard } from 'src/app/shared/model/flashcard.model';
 export class FlashcardContainerComponent implements OnInit {
 
   @Input() flashcards: Flashcard[];
+  @Input() editMode: boolean;
 
   constructor() { }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Flashcard } from 'src/app/shared/model/flashcard.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-flashcard',
@@ -9,7 +10,9 @@ import { Flashcard } from 'src/app/shared/model/flashcard.model';
 export class FlashcardComponent implements OnInit {
   @Input() flashcard: Flashcard;
 
-  constructor() {}
+  @Input() editMode: boolean;
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -27,5 +30,15 @@ export class FlashcardComponent implements OnInit {
       return;
     }
     event.target.parentElement.parentElement.classList.toggle('hover');
+  }
+
+  onEditFlashcard() {
+    const state = {
+      flashcard: this.flashcard,
+    };
+
+    this.router.navigate([`/flashcards/form`], {
+      state,
+    });
   }
 }
