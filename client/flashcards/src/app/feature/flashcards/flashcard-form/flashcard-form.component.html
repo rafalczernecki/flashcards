@@ -4,7 +4,8 @@
   </div>
 </div>
 <div class="container">
-  <h1>Add flashcard</h1>
+  <h1 *ngIf="!flashcardToEdit">Add flashcard</h1>
+  <h1 *ngIf="flashcardToEdit">Edit flashcard</h1>
   <form [formGroup]="form" (ngSubmit)="translationFormSubmit()"
     *ngIf="availableTranslationLanguages && !translationRequestSent">
     <div class="form-group col-md-6">
@@ -45,9 +46,9 @@
   </div>
 
   <div class="alert alert-danger" *ngIf="errorMessage">
-    {{ errorMessage }}</div>
+    {{ errorMessage }}. <span *ngFor="let error of errors">{{ error.msg }}. </span></div>
 
-  <button class="btn btn-outline-primary" *ngIf="errorMessage" (click)="onFlashcardCanceled()">Back</button>
+  <button class="btn btn-outline-primary" *ngIf="errorMessage && !flashcardToEdit" (click)="onFlashcardCanceled()">Back</button>
 
   <h2 *ngIf="flashcard && translations">Choose translations</h2>
   <app-translations-container *ngIf="flashcard && translations" [translations]="translations"
