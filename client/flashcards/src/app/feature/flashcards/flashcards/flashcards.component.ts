@@ -58,8 +58,9 @@ export class FlashcardsComponent implements OnInit {
     );
   }
 
-  switchEditMode() {
+  switchEditMode(event) {
     this.editMode = !this.editMode;
+    event.target.classList.toggle('edit-checked');
   }
 
   originalLangSelected(value): void {

@@ -1,10 +1,18 @@
 <div class="flip-card">
   <div class="flip-card-inner">
     <div class="flip-card-front" (click)="onFlip($event)">
+      <div *ngIf="editMode" class="btn-placeholder first-level-child">
+        <input class="btn btn-outline-warning" type="button" value="&#x270E;" (click)="onEditFlashcard()">
+
+      </div>
       <strong class="first-level-child">{{flashcard.word}}</strong>
     </div>
     <div class="flip-card-back" (click)="onFlip($event)">
-      <div class="first-level-child" *ngFor="let translationPair of flashcard.translations">
+      <div *ngIf="editMode" class="btn-placeholder">
+        <input *ngIf="editMode" class="btn btn-outline-warning btn-edit" type="button" value="&#x270E;"
+          (click)="onEditFlashcard()">
+      </div>
+      <div class="first-level-child first-level-child" *ngFor="let translationPair of flashcard.translations">
         <strong class="second-level-child">{{translationPair.originalWord}}: </strong>
         <span class="second-level-child">{{translationPair.translatedWord}}</span>
         <hr class="second-level-child">
