@@ -20,12 +20,19 @@ app.use((req, res, next) => {
 
 app.use('/flashcards', flashcardsRoutes);
 
+app.use((error, req, res, next) => {
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
+});
+
+
 mongoose
   .connect(
     'mongodb+srv://user:FxqM6KLyIGqVTmaw@cluster0-5maxx.mongodb.net/flashcards?retryWrites=true&w=majority'
   )
   .then(result => {
-
       app.listen(3000);
   })
   .catch((err) => {
