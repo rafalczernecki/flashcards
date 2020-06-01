@@ -11,7 +11,7 @@ exports.getDictionaries = (req, res, next) => {
   const lang = 'en';
   const apiURL = `http://api.pons.com/v1/dictionaries?language=${lang}`;
 
-  http
+    http
     .get(apiURL, (apiRes) => {
       let data = '';
 
@@ -28,13 +28,24 @@ exports.getDictionaries = (req, res, next) => {
 
         res.status(200).json(dictionaries);
       });
+
     })
     .on('error', (err) => {
-      console.log('Error: ' + err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 
 exports.postTranslation = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res
+      .status(422)
+      .json({ message: 'Validation failed', errors: errors.array() });
+  }
+
   const dictionary = req.body.dictionary;
   const originalLang = req.body.originalLang;
   const word = req.body.word;
@@ -69,7 +80,10 @@ exports.postTranslation = (req, res, next) => {
       });
     })
     .on('error', (err) => {
-      console.log('Error: ' + err.message);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 
@@ -99,15 +113,20 @@ exports.postSave = (req, res, next) => {
             });
           })
           .catch((err) => {
-            console.log(err);
+            if (!err.statusCode) {
+              err.statusCode = 500;
+            }
+            next(err);
           });
       })
       .catch((err) => {
-        console.log(err);
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
       });
   } else {
     const flashcardSchema = new Flashcard({
-      id: id,
       dictionary: dictionary,
       originalLang: originalLang,
       word: word,
@@ -121,37 +140,65 @@ exports.postSave = (req, res, next) => {
           result,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
+      });
   }
 };
 
 exports.postFlashcards = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res
+      .status(422)
+      .json({ message: 'Validation failed', errors: errors.array() });
+  }
+
   const dictionary = req.body.dictionary;
   const originalLang = req.body.originalLang;
+
+  if (!dictionary || !originalLang) {
+    const error = new Error('Invalid input');
+    error.statusCode = 400;
+    throw error;
+  }
 
   Flashcard.find({ dictionary: dictionary, originalLang: originalLang })
     .then((flashcards) => {
       res.status(200).json(flashcards);
     })
     .catch((err) => {
-      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 
 exports.deleteFlashcard = (req, res, next) => {
   const flashcardId = req.body.flashcardId;
-  Flashcard.findById(flashcardId)
-      .then((flashcard) => {
-        let i = 1;
-      }).catch(err => {
-        let i = 1;
-      })
+  if (!flashcardId) {
+    const error = new Error('Missing id of flashcard to delete.');
+    error.statusCode = 400;
+    throw error;
+  }
 
   Flashcard.findByIdAndRemove(flashcardId)
     .then((result) => {
+      if (!result) {
+        const error = new Error('A flashcard with this id could not be found.');
+        error.statusCode = 404;
+        next(error);
+      }
       res.status(200).json(result);
     })
     .catch((err) => {
-      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
