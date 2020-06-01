@@ -7,7 +7,11 @@ const router = express.Router();
 
 router.get('/dictionaries', flashcardsController.getDictionaries);
 
-router.post('/translation', flashcardsController.postTranslation);
+router.post('/translation', [
+    body('dictionary').trim().isLength({min:4, max: 4}),
+    body('originalLang').trim().isLength({min:2, max:2}),
+    body('word').trim().isLength({min: 1, max: 30})
+], flashcardsController.postTranslation);
 
 router.post('/save', [
     body('dictionary').trim().isLength({min:4, max: 4}),
